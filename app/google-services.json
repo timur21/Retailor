@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "206095085234",
+    "firebase_url": "https://retailor-7bd5d.firebaseio.com",
+    "project_id": "retailor-7bd5d",
+    "storage_bucket": "retailor-7bd5d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206095085234:android:141b749a78ddc1e5e023ab",
+        "android_client_info": {
+          "package_name": "com.example.retailor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206095085234-fru82db2ad1chbdhukhaut3cvclfi0d9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.retailor",
+            "certificate_hash": "f711fc73f7497dc33c83aecf5d32c66217b92a2b"
+          }
+        },
+        {
+          "client_id": "206095085234-h30lttgjag68hvv4lreq2m959lvh09o2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuNI1H3L2k5l9toLvTLsqH9PfKba8k0QY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "206095085234-h30lttgjag68hvv4lreq2m959lvh09o2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
