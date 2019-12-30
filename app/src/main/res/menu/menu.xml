@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:title="Главная" android:id="@+id/main" android:icon="@drawable/ic_main"/>
+        <item android:title="Новости" android:id="@+id/news" android:icon="@drawable/ic_news"/>
+        <item android:title="Каталог товаров" android:id="@+id/catalog" android:icon="@drawable/ic_catalog"/>
+        <item android:title="Личный кабинет" android:id="@+id/profile" android:icon="@drawable/ic_person"/>
+    </group>
+
+
+    <item android:title="Утилиты">
+        <menu>
+            <item android:title="Настройки" android:icon="@drawable/ic_settings_black_24dp" android:id="@+id/settings"/>
+            <item android:title="Выйти" android:icon="@drawable/ic_exit_to_app_black_24dp" android:id="@+id/exit"/>
+
+        </menu>
+    </item>
+</menu>

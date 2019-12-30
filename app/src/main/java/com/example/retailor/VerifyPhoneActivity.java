@@ -3,117 +3,160 @@ package com.example.retailor;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.concurrent.TimeUnit;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class VerifyPhoneActivity extends AppCompatActivity {
 
-    private String verificationID;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
-    private EditText codeEntered;
+    private PhoneAuthProvider.ForceResendingToken mResendToken;
+    String phoneNumber;
+    String verificationCode;
+    Button btnSignIn;
+    Button resend;
+    MaterialEditText code_enter;
+    RelativeLayout parent;
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Lato.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build());
         setContentView(R.layout.activity_verify_phone);
 
         mAuth = FirebaseAuth.getInstance();
-        codeEntered = findViewById(R.id.verification_code);
+        mAuth.setLanguageCode("ru");
 
-        progressBar = findViewById(R.id.progressBar2);
+        phoneNumber = getIntent().getStringExtra("phonenumber");
 
-        String phoneNumber = getIntent().getStringExtra("phonenumber");
-        sendVerificationCode(phoneNumber);
+        code_enter = findViewById(R.id.verificationCode);
+        progressBar = findViewById(R.id.progressBar);
+        btnSignIn = findViewById(R.id.sign_in);
+        parent = findViewById(R.id.parent);
+        resend = findViewById(R.id.resend);
 
-        findViewById(R.id.signin_btn).setOnClickListener(new View.OnClickListener() {
+        sendVerification(phoneNumber);
+
+        resend.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+                resendVerificationCode(phoneNumber, mResendToken);
+                Snackbar.make(parent, "Code resent", Snackbar.LENGTH_SHORT).show();
+            }
+        });
 
-                String code = codeEntered.getText().toString().trim();
-
-                if (code.isEmpty() || code.length() < 6) {
-                    codeEntered.setError("Введите код ...");
-                    codeEntered.requestFocus();
-                    return;
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(TextUtils.isEmpty(code_enter.getText())){
+                    Snackbar.make(parent, "Please enter code...", Snackbar.LENGTH_SHORT).show();
+                }else{
+                    verifyPhoneNumber();
                 }
-                verifyCode(code);
             }
         });
     }
 
-    private void verifyCode (String code) {
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationID, code);
-        signInWithCredential(credential);
+    private void sendVerification(String phoneNumber){
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber,
+                60,
+                TimeUnit.SECONDS,
+                TaskExecutors.MAIN_THREAD,
+                callbacks
+        );
+
+        Snackbar.make(parent, "Code sent", Snackbar.LENGTH_SHORT).show();
     }
 
-    private void signInWithCredential(PhoneAuthCredential credential) {
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks =
+            new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                @Override
+                public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                    String code = phoneAuthCredential.getSmsCode();
+                    if (code!=null){
+                        code_enter.setText(code);
+                    }
+                }
+
+                @Override
+                public void onVerificationFailed(@NonNull FirebaseException e) {
+                    Snackbar.make(parent, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                    super.onCodeSent(s, forceResendingToken);
+                    verificationCode = s;
+                    mResendToken = forceResendingToken;
+                    Toast.makeText(getApplicationContext(), "Code sent", Toast.LENGTH_SHORT).show();
+                }
+            };
+
+    private void signInWithCredential(PhoneAuthCredential credential){
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            Intent intent = new Intent(VerifyPhoneActivity.this, ProfileActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(VerifyPhoneActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(VerifyPhoneActivity.this, HomeActivity.class));
+                        }
+                        else{
+                            Snackbar.make(parent, task.getException().getMessage(), Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-    private void sendVerificationCode(String number){
-        progressBar.setVisibility(View.VISIBLE);
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                number,
-                60,
-                TimeUnit.SECONDS,
-                TaskExecutors.MAIN_THREAD,
-                mCallBack
-        );
+    private void verifyPhoneNumber(){
+        String code = code_enter.getText().toString();
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, code);
+        signInWithCredential(credential);
     }
 
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks
-            mCallBack = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
-        @Override
-        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-            super.onCodeSent(s, forceResendingToken);
-
-            verificationID = s;
-        }
-
-        @Override
-        public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-
-            String code = phoneAuthCredential.getSmsCode();
-            if (code != null){
-                codeEntered.setText(code);
-                verifyCode(code);
-            }
-
-        }
-
-        @Override
-        public void onVerificationFailed(@NonNull FirebaseException e) {
-            Toast.makeText(VerifyPhoneActivity.this, e.getMessage(),Toast.LENGTH_SHORT).show();
-        }
-    };
+    private void resendVerificationCode(String phoneNumber,PhoneAuthProvider.ForceResendingToken token){
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber,
+                60,
+                TimeUnit.SECONDS,
+                this,
+                callbacks,
+                token);
+    }
 
 }

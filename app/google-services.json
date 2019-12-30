@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "206095085234-6atau7rcsjic3c86r9267gokk7u5ddmv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.retailor",
+            "certificate_hash": "aa5268664069b1c0e709b5a99bf26ab00a160bcb"
+          }
+        },
+        {
           "client_id": "206095085234-fru82db2ad1chbdhukhaut3cvclfi0d9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
