@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.retailor.Models.AgreementDetails;
@@ -61,6 +62,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 getUserAgreement(dataSnapshot.getValue().toString());
+
             }
 
             @Override
@@ -74,8 +76,6 @@ public class MainFragment extends Fragment {
         ClientName clientName = new ClientName(userName);
 
         ClientAuth auth = retrofit.create(ClientAuth.class);
-
-        Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
 
         Call<Table> call = auth.getClientDetails(clientName);
 

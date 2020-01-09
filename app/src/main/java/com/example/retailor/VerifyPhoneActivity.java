@@ -21,8 +21,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import java.util.concurrent.TimeUnit;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -134,9 +137,26 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            saveUserData(clientName);
-                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(VerifyPhoneActivity.this, HomeActivity.class));
+
+                            DatabaseReference activated = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
+
+                            activated.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.hasChild("activated")){
+                                        startActivity(new Intent(VerifyPhoneActivity.this, BasicLogin.class));
+                                    }else{
+                                        saveUserData(clientName);
+                                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(VerifyPhoneActivity.this, PassActivity.class));
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                         }
                         else{
                             Snackbar.make(parent, task.getException().getMessage(), Snackbar.LENGTH_SHORT).show();

@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.retailor.Models.DatabaseUser;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,7 +45,6 @@ public class PassActivity extends AppCompatActivity {
         passcodeView = findViewById(R.id.passcode_view);
         passcodeView
                 .setPasscodeLength(4)
-                .setLocalPasscode("1111")
                 .setSecondInputTip("Подтвердите пароль")
                 .setCorrectInputTip("Успешно!")
                 .setWrongInputTip("Пароли не совпадают")
@@ -55,9 +56,21 @@ public class PassActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(String number) {
+                        setUserPassword(passcodeView.getLocalPasscode());
+                        Toast.makeText(PassActivity.this, "Ваш пароль был сохранен", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(PassActivity.this, HomeActivity.class);
                         startActivity(intent);
                     }
                 });
+    }
+
+    private void setUserPassword(String password){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid())
+                .child("password");
+        reference.setValue(password);
+
+        DatabaseReference activated = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid())
+                .child("activated");
+        activated.setValue("true");
     }
 }

@@ -22,7 +22,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class BasicLogin extends AppCompatActivity {
 
     PasscodeView passcodeView;
-    DatabaseReference reference;
     FirebaseUser user;
 
     @Override
@@ -39,12 +38,25 @@ public class BasicLogin extends AppCompatActivity {
                 .build());
         setContentView(R.layout.activity_basic_login);
 
-        String code = getCode();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         passcodeView = findViewById(R.id.passcode_view);
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid())
+                .child("password");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                passcodeView.setLocalPasscode(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         passcodeView
                 .setPasscodeLength(4)
-                .setLocalPasscode(code)
                 .setCorrectInputTip("Успешно!")
                 .setWrongInputTip("Неправильный пароль")
                 .setListener(new PasscodeView.PasscodeViewListener() {
@@ -58,27 +70,5 @@ public class BasicLogin extends AppCompatActivity {
                         startActivity(new Intent(BasicLogin.this, HomeActivity.class));
                     }
                 });
-    }
-
-    private String getCode(){
-        final String[] temp = {""};
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance()
-                .getReference("Users")
-                .child(user.getUid())
-                .child("passcode");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                temp[0] = dataSnapshot.getValue().toString();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        return temp[0];
     }
 }
