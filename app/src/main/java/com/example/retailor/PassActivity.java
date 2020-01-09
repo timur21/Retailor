@@ -21,7 +21,6 @@ public class PassActivity extends AppCompatActivity {
     PasscodeView passcodeView;
     FirebaseUser user;
     FirebaseAuth auth;
-    DatabaseReference reference;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -44,6 +43,7 @@ public class PassActivity extends AppCompatActivity {
         passcodeView = findViewById(R.id.passcode_view);
         passcodeView
                 .setPasscodeLength(4)
+                .setLocalPasscode("1111")
                 .setSecondInputTip("Подтвердите пароль")
                 .setCorrectInputTip("Успешно!")
                 .setWrongInputTip("Пароли не совпадают")
@@ -55,16 +55,9 @@ public class PassActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(String number) {
-                        saveUserData();
                         Intent intent = new Intent(PassActivity.this, HomeActivity.class);
                         startActivity(intent);
                     }
                 });
-    }
-
-    private void saveUserData(){
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
-        DatabaseUser dbUser = new DatabaseUser(passcodeView.getLocalPasscode(), true);
-        reference.setValue(dbUser);
     }
 }
