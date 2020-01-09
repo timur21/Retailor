@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,35 +46,36 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         user = FirebaseAuth.getInstance().getCurrentUser();
-
         retrofit = NetworkUtils.getRetrofit();
 
-        ClientAuth auth = retrofit.create(ClientAuth.class);
+        getUserName();
 
+        return view;
+    }
+
+    private void getUserName(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid())
                 .child("client");
-
-        final String[] name = new String[1];
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                name[0] = dataSnapshot.getValue().toString();
-                clientName = dataSnapshot.getValue().toString();
-                Toast.makeText(getContext(), "Firebase: "+clientName, Toast.LENGTH_SHORT).show();
+                getUserAgreement(dataSnapshot.getValue().toString());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                
+
             }
         });
+    }
 
-//        Toast.makeText(getContext(), "Outside: "+clientName, Toast.LENGTH_LONG).show();
+    private void getUserAgreement(String userName){
+        ClientName clientName = new ClientName(userName);
 
-        ClientName clientName = new ClientName(name[0]);
+        ClientAuth auth = retrofit.create(ClientAuth.class);
 
-        Toast.makeText(getContext(), name[0], Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
 
         Call<Table> call = auth.getClientDetails(clientName);
 
@@ -83,7 +85,7 @@ public class MainFragment extends Fragment {
                 if (response.isSuccessful()){
                     Table table = response.body();
                     List<List<AgreementDetails>> userAgreementDetails = table.getAgreementDetails();
-                    Log.d("MYTAG", table.getINN());
+                    Log.d("MYTAG", table.getMainPhoneNumber());
                 }
             }
 
@@ -92,8 +94,6 @@ public class MainFragment extends Fragment {
 
             }
         });
-
-        return view;
     }
 }
 
