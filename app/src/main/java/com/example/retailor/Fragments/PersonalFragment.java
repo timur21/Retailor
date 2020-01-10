@@ -1,7 +1,6 @@
 package com.example.retailor.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,11 +11,14 @@ import android.view.ViewGroup;
 
 import com.example.retailor.R;
 
-public class SettingsFragment extends Fragment {
+public class PersonalFragment extends Fragment {
+    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        return view;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_personal, container, false);
     }
+
 }

@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:id="@+id/passcode_view"
         android:background="#4CAF50"
-        app:firstInputTip="Введите 4-х значный пароль"
+        app:firstInputTip="Введите ваш PIN"
         app:correctStateColor="@android:color/holo_green_light"
         app:wrongStateColor="@android:color/holo_red_light"
         app:numberTextColor="@android:color/darker_gray"
