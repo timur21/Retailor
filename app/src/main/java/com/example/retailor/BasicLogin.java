@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,11 +41,11 @@ public class BasicLogin extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        passcodeView = findViewById(R.id.passcode_view);
+        passcodeView = findViewById(R.id.passcode_view2);
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid())
                 .child("password");
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 passcodeView.setLocalPasscode(dataSnapshot.getValue().toString());
@@ -55,10 +56,11 @@ public class BasicLogin extends AppCompatActivity {
 
             }
         });
-        passcodeView
+
+      passcodeView
                 .setPasscodeLength(4)
-                .setCorrectInputTip("Успешно!")
-                .setWrongInputTip("Неправильный пароль")
+                .setCorrectInputTip("ПИН код введен правильно")
+                .setWrongInputTip("Вы ввели не правильный ПИН код")
                 .setListener(new PasscodeView.PasscodeViewListener() {
                     @Override
                     public void onFail() {

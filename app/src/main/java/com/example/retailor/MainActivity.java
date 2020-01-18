@@ -88,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-//        activityConsider();
-
         FirebaseApp.initializeApp(this);
 
         parent = (RelativeLayout) findViewById(R.id.parent);
@@ -99,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         progressBar.setVisibility(View.GONE);
+
+        activityConsider();
 
         register_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +170,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void activityConsider(){
+        progressBar.setVisibility(View.VISIBLE);
+        Toast.makeText(MainActivity.this, "Проверка возможности автоматического входа",Toast.LENGTH_SHORT).show();
+
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -180,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue().equals(true)){
+                    if (dataSnapshot.getValue().equals("true")){
                         Intent intent = new Intent(MainActivity.this, BasicLogin.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);

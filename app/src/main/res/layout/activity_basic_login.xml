@@ -10,7 +10,7 @@
     <com.hanks.passcodeview.PasscodeView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/passcode_view"
+        android:id="@+id/passcode_view2"
         android:background="#4CAF50"
         app:firstInputTip="Введите ваш PIN"
         app:correctStateColor="@android:color/holo_green_light"

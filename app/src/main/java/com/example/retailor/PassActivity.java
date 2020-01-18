@@ -45,9 +45,9 @@ public class PassActivity extends AppCompatActivity {
         passcodeView = findViewById(R.id.passcode_view);
         passcodeView
                 .setPasscodeLength(4)
-                .setSecondInputTip("Подтвердите пароль")
-                .setCorrectInputTip("Успешно!")
-                .setWrongInputTip("Пароли не совпадают")
+                .setSecondInputTip("Подтвердите ПИН код")
+                .setCorrectInputTip("ПИН коды совпали")
+                .setWrongInputTip("ПИН коды не совпадают")
                 .setListener(new PasscodeView.PasscodeViewListener() {
                     @Override
                     public void onFail() {
@@ -57,7 +57,7 @@ public class PassActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String number) {
                         setUserPassword(passcodeView.getLocalPasscode());
-                        Toast.makeText(PassActivity.this, "Ваш пароль был сохранен", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PassActivity.this, "Ваш ПИН код был сохранен", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(PassActivity.this, HomeActivity.class);
                         startActivity(intent);
                     }

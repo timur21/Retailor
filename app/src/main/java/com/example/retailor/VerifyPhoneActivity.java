@@ -79,7 +79,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 resendVerificationCode(phoneNumber, mResendToken);
-                Snackbar.make(parent, "Code resent", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(parent, "Код переотправлен", Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -87,7 +87,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(TextUtils.isEmpty(code_enter.getText())){
-                    Snackbar.make(parent, "Please enter code...", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(parent, "Пожалуйста, введите код ...", Snackbar.LENGTH_SHORT).show();
                 }else{
                     verifyPhoneNumber();
                 }
@@ -104,7 +104,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                 callbacks
         );
 
-        Snackbar.make(parent, "Code sent", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(parent, "Код отправлен", Snackbar.LENGTH_SHORT).show();
     }
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks =
@@ -127,7 +127,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                     super.onCodeSent(s, forceResendingToken);
                     verificationCode = s;
                     mResendToken = forceResendingToken;
-                    Toast.makeText(getApplicationContext(), "Code sent", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Код отправлен", Toast.LENGTH_SHORT).show();
                 }
             };
 
@@ -147,7 +147,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                                         startActivity(new Intent(VerifyPhoneActivity.this, BasicLogin.class));
                                     }else{
                                         saveUserData(clientName);
-                                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Успешно", Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(VerifyPhoneActivity.this, PassActivity.class));
                                     }
                                 }

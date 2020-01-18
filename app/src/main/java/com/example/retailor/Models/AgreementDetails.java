@@ -28,6 +28,26 @@ public class AgreementDetails {
     @Expose
     private String leftAmount;
 
+    private boolean expanded;
+
+    public AgreementDetails(String agreement, String date, String startingAmount, String toBePaidAmount, String paidAmount, String leftAmount) {
+        this.agreement = agreement;
+        this.date = date;
+        this.startingAmount = startingAmount;
+        this.toBePaidAmount = toBePaidAmount;
+        this.paidAmount = paidAmount;
+        this.leftAmount = leftAmount;
+        this.expanded = false;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
+
     public String getAgreement() {
         return agreement;
     }

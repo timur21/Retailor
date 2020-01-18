@@ -93,7 +93,7 @@ public class MainFragment extends Fragment {
     private void setUpViewPager(ViewPager viewPager) {
         SectionPagerAdapter adapter = new SectionPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        adapter.addFragment(new ProfileFragment(), "Личные дог.");
+        adapter.addFragment(new PersonalFragment(), "Личные дог.");
         adapter.addFragment(new WarranterFragment(), "Поручитель дог.");
 
         viewPager.setAdapter(adapter);
