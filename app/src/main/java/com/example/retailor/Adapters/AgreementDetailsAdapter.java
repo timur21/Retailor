@@ -52,7 +52,7 @@ public class AgreementDetailsAdapter extends RecyclerView.Adapter<AgreementDetai
 
         PaymentDetailsAdapter paymentDetailsAdapter = new PaymentDetailsAdapter(context, arrayList);
 
-        holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
         holder.recyclerView.setAdapter(paymentDetailsAdapter);
     }
 
