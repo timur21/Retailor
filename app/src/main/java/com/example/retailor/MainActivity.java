@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -67,10 +68,8 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     RelativeLayout parent;
     Retrofit retrofit;
-
+    LinearLayout linearLayout1, linearLayout2;
     List<User> userList= new ArrayList();
-
-    private static final String TAG = "PhoneAuthActivity";
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -95,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
         phone_num = findViewById(R.id.phoneNum);
         register_btn = findViewById(R.id.register_btn);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        linearLayout1 = findViewById(R.id.linearLayoutVertical1);
+        linearLayout2 = findViewById(R.id.linearLayoutVertical2);
 
         progressBar.setVisibility(View.GONE);
 
@@ -103,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
         register_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                linearLayout1.setVisibility(View.VISIBLE);
+                linearLayout2.setVisibility(View.INVISIBLE);
 
                 phone_number = phone_num.getText().toString().trim();
 
@@ -150,28 +154,25 @@ public class MainActivity extends AppCompatActivity {
 
                     if (serverResponse == false) {
 
-                        //Toast.makeText(MainActivity.this, "Ваши данные не найдены в базе данных. Введите номер телефона правильно!", Toast.LENGTH_SHORT).show();
-                        Snackbar.make(parent, "Ваши данные не найдены в базе данных. Введите номер телефона правильно!", Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Ваши данные не найдены в базе данных. Введите номер телефона правильно!", Toast.LENGTH_SHORT).show();
                     }
 
                     progressBar.setVisibility(View.GONE);
                 }
                 else{
-                    Snackbar.make(parent,"Произошла ошибка при получении данных!", Snackbar.LENGTH_LONG).show();
-                   // Toast.makeText(MainActivity.this, "Failed to get data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Произошла ошибка при получении данных!", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Произошла ошибка при получении данных!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void activityConsider(){
         progressBar.setVisibility(View.VISIBLE);
-        Toast.makeText(MainActivity.this, "Проверка возможности автоматического входа",Toast.LENGTH_SHORT).show();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 

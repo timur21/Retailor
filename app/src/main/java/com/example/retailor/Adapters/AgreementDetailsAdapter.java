@@ -26,6 +26,7 @@ public class AgreementDetailsAdapter extends RecyclerView.Adapter<AgreementDetai
     List<List<AgreementDetails>> agreementDetails;
     List<AgreementDetails> arrayList;
     Context context;
+    RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
 
 
     public AgreementDetailsAdapter(Context context, List<List<AgreementDetails>> agreementDetails){
@@ -52,8 +53,13 @@ public class AgreementDetailsAdapter extends RecyclerView.Adapter<AgreementDetai
 
         PaymentDetailsAdapter paymentDetailsAdapter = new PaymentDetailsAdapter(context, arrayList);
 
-        holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+
+        layoutManager.setInitialPrefetchItemCount(arrayList.size());
+
+        holder.recyclerView.setLayoutManager(layoutManager);
         holder.recyclerView.setAdapter(paymentDetailsAdapter);
+        holder.recyclerView.setRecycledViewPool(viewPool);
     }
 
     @Override

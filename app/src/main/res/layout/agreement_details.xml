@@ -17,7 +17,7 @@
 
             <TextView
                 android:id="@+id/agreementName"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="AgreementName"
@@ -28,9 +28,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/expandableLayout"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:weightSum="5"
+                    android:weightSum="4"
                     android:id="@+id/linearLayoutVertical"
                     android:gravity="center">
 
@@ -48,7 +49,7 @@
                         android:gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:text="Дата" />
 
                     <TextView
@@ -76,7 +77,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayoutVertical"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

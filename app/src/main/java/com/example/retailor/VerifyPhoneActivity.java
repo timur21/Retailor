@@ -119,7 +119,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
 
                 @Override
                 public void onVerificationFailed(@NonNull FirebaseException e) {
-                    Snackbar.make(parent, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(parent, "Сбой системы", Snackbar.LENGTH_SHORT).show();
                 }
 
                 @Override

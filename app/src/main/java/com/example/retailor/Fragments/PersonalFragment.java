@@ -58,7 +58,7 @@ public class PersonalFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // clientName = dataSnapshot.getValue().toString();
+               // clientName = dataSnapshot.getValue().toString();
             }
 
             @Override
@@ -80,14 +80,17 @@ public class PersonalFragment extends Fragment {
                 Table table = response.body();
 
                 agreementDetails = table.getAgreementDetails();
-
-                AgreementDetailsAdapter agreementDetailsAdapter = new AgreementDetailsAdapter(getContext(), agreementDetails);
-                recyclerView.setAdapter(agreementDetailsAdapter);
+                if ( agreementDetails == null){
+                    Toast.makeText(getContext(), "У вас нет активных договоров", Toast.LENGTH_LONG).show();
+                } else {
+                    AgreementDetailsAdapter agreementDetailsAdapter = new AgreementDetailsAdapter(getContext(), agreementDetails);
+                    recyclerView.setAdapter(agreementDetailsAdapter);
+                }
             }
 
             @Override
             public void onFailure(Call<Table> call, Throwable t) {
-                Toast.makeText(getContext(), "MISTAKE", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Произошла ошибка подключения к серверу", Toast.LENGTH_LONG).show();
             }
         });
 
